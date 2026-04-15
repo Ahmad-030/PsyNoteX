@@ -14,6 +14,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prov = context.watch<AppProvider>();
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
 
     return Scaffold(
       body: GradientBackground(
@@ -26,14 +27,14 @@ class SettingsScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios,
-                            color: AppColors.textPrimary, size: 20),
+                        icon: Icon(Icons.arrow_back_ios,
+                            color: cs.textPrimary, size: 20),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      const Text(
+                      Text(
                         'Settings',
                         style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: cs.textPrimary,
                           fontSize: 26,
                           fontWeight: FontWeight.w800,
                         ),
@@ -43,7 +44,6 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
 
-              // ── APPEARANCE ──────────────────────────────────────
               SliverToBoxAdapter(
                 child: _Section(
                   title: 'APPEARANCE',
@@ -53,8 +53,8 @@ class SettingsScreen extends StatelessWidget {
                       title: 'Theme',
                       trailing: DropdownButton<ThemeMode>(
                         value: prov.themeMode,
-                        dropdownColor: AppColors.surface,
-                        style: const TextStyle(color: AppColors.textPrimary),
+                        dropdownColor: cs.bgCard,
+                        style: TextStyle(color: cs.textPrimary),
                         underline: const SizedBox.shrink(),
                         items: const [
                           DropdownMenuItem(
@@ -73,7 +73,6 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
 
-              // ── SECURITY ─────────────────────────────────────────
               SliverToBoxAdapter(
                 child: _Section(
                   title: 'SECURITY',
@@ -90,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (_) =>
-                                  const LockScreen(isSetup: true)),
+                                      const LockScreen(isSetup: true)),
                             );
                           } else {
                             prov.disablePin();
@@ -112,7 +111,6 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
 
-              // ── DATA ─────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: _Section(
                   title: 'DATA',
@@ -128,7 +126,6 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
 
-              // ── ABOUT ─────────────────────────────────────────────
               SliverToBoxAdapter(
                 child: _Section(
                   title: 'ABOUT',
@@ -151,9 +148,9 @@ class SettingsScreen extends StatelessWidget {
                     _SettingTile(
                       icon: Icons.info_outlined,
                       title: 'Version',
-                      trailing: const Text(AppStrings.version,
+                      trailing: Text(AppStrings.version,
                           style: TextStyle(
-                              color: AppColors.textHint, fontSize: 13)),
+                              color: cs.textHint, fontSize: 13)),
                     ),
                   ],
                 ),
@@ -168,20 +165,21 @@ class SettingsScreen extends StatelessWidget {
   }
 
   void _confirmReset(BuildContext context, AppProvider prov) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('Reset Data',
-            style: TextStyle(color: AppColors.textPrimary)),
-        content: const Text(
+        backgroundColor: cs.bgCard,
+        title: Text('Reset Data',
+            style: TextStyle(color: cs.textPrimary)),
+        content: Text(
             'All notes and tags will be permanently deleted. This cannot be undone.',
-            style: TextStyle(color: AppColors.textSecondary)),
+            style: TextStyle(color: cs.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Cancel',
+                style: TextStyle(color: cs.textSecondary)),
           ),
           TextButton(
             onPressed: () {
@@ -198,8 +196,6 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-// ── Section wrapper ───────────────────────────────────────────────────────────
-
 class _Section extends StatelessWidget {
   final String title;
   final List<Widget> children;
@@ -207,6 +203,7 @@ class _Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: Column(
@@ -215,8 +212,8 @@ class _Section extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 4, bottom: 8, top: 8),
             child: Text(title,
-                style: const TextStyle(
-                    color: AppColors.textHint,
+                style: TextStyle(
+                    color: cs.textHint,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.5)),
@@ -231,10 +228,7 @@ class _Section extends StatelessWidget {
                 children: [
                   e.value,
                   if (e.key < children.length - 1)
-                    const Divider(
-                        height: 1,
-                        color: AppColors.divider,
-                        indent: 56),
+                    Divider(height: 1, color: cs.divider, indent: 56),
                 ],
               ))
                   .toList(),
@@ -245,8 +239,6 @@ class _Section extends StatelessWidget {
     ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0);
   }
 }
-
-// ── Individual tile ───────────────────────────────────────────────────────────
 
 class _SettingTile extends StatelessWidget {
   final IconData icon;
@@ -267,6 +259,7 @@ class _SettingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return ListTile(
       onTap: onTap,
       leading: Container(
@@ -276,23 +269,20 @@ class _SettingTile extends StatelessWidget {
           color: AppColors.primary.withOpacity(0.15),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(icon,
-            color: titleColor ?? AppColors.accent, size: 18),
+        child: Icon(icon, color: titleColor ?? cs.accent, size: 18),
       ),
       title: Text(title,
           style: TextStyle(
-              color: titleColor ?? AppColors.textPrimary,
+              color: titleColor ?? cs.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600)),
       subtitle: subtitle != null
           ? Text(subtitle!,
-          style: const TextStyle(
-              color: AppColors.textHint, fontSize: 12))
+              style: TextStyle(color: cs.textHint, fontSize: 12))
           : null,
       trailing: trailing ??
           (onTap != null
-              ? const Icon(Icons.chevron_right,
-              color: AppColors.textHint, size: 18)
+              ? Icon(Icons.chevron_right, color: cs.textHint, size: 18)
               : null),
     );
   }

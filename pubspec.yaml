@@ -44,6 +44,7 @@ dependencies:
   webview_flutter: ^4.13.1
   flutter_slidable: ^4.0.3
   uuid: ^4.5.3
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +56,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+flutter_icons:
+    android: true
+    ios: true
+    image_path: "assets/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,7 +76,6 @@ flutter:
   assets:
     - assets/lottie/splash.json
     - assets/lottie/menu.json
-    - assets/lottie/about.json
     - assets/html/privacy_policy.html
 
   # An image asset can refer to one or more resolution-specific "variants", see

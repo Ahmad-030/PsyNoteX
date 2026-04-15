@@ -37,6 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final prov = context.watch<AppProvider>();
     final results = _filter(prov.notes);
 
@@ -50,8 +51,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios,
-                          color: AppColors.textPrimary, size: 20),
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: cs.textPrimary, size: 20),
                       onPressed: () => Navigator.pop(context),
                     ),
                     Expanded(
@@ -59,15 +60,15 @@ class _SearchScreenState extends State<SearchScreen> {
                         controller: _ctrl,
                         autofocus: true,
                         onChanged: (v) => setState(() => _query = v),
-                        style: const TextStyle(color: AppColors.textPrimary),
+                        style: TextStyle(color: cs.textPrimary),
                         decoration: InputDecoration(
                           hintText: 'Search thoughts...',
-                          prefixIcon: const Icon(Icons.search,
-                              color: AppColors.textHint, size: 20),
+                          prefixIcon: Icon(Icons.search,
+                              color: cs.textHint, size: 20),
                           suffixIcon: _query.isNotEmpty
                               ? IconButton(
-                                  icon: const Icon(Icons.close,
-                                      color: AppColors.textHint, size: 18),
+                                  icon: Icon(Icons.close,
+                                      color: cs.textHint, size: 18),
                                   onPressed: () {
                                     _ctrl.clear();
                                     setState(() => _query = '');
@@ -82,7 +83,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   ],
                 ),
               ),
-              // Mood filter chips
               SizedBox(
                 height: 44,
                 child: ListView(
@@ -106,23 +106,20 @@ class _SearchScreenState extends State<SearchScreen> {
                         decoration: BoxDecoration(
                           color: sel
                               ? AppColors.primary.withOpacity(0.4)
-                              : AppColors.bgCardLight,
+                              : cs.bgCardLight,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: sel ? AppColors.accent : Colors.transparent,
+                            color: sel ? cs.accent : Colors.transparent,
                           ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(m.emoji,
-                                style: const TextStyle(fontSize: 14)),
+                            Text(m.emoji, style: const TextStyle(fontSize: 14)),
                             const SizedBox(width: 4),
                             Text(m.label,
                                 style: TextStyle(
-                                  color: sel
-                                      ? AppColors.accent
-                                      : AppColors.textSecondary,
+                                  color: sel ? cs.accent : cs.textSecondary,
                                   fontSize: 12,
                                 )),
                           ],
@@ -139,8 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   children: [
                     Text(
                       '${results.length} result${results.length != 1 ? 's' : ''}',
-                      style: const TextStyle(
-                          color: AppColors.textHint, fontSize: 12),
+                      style: TextStyle(color: cs.textHint, fontSize: 12),
                     ),
                   ],
                 ),
@@ -159,9 +155,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               _query.isEmpty
                                   ? 'Start typing to search'
                                   : 'No results for "$_query"',
-                              style: const TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 14),
+                              style: TextStyle(
+                                  color: cs.textSecondary, fontSize: 14),
                             ),
                           ],
                         ),
@@ -201,12 +196,13 @@ class _HighlightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.bgCard,
+        color: cs.bgCard,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.divider),
+        border: Border.all(color: cs.divider),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),
@@ -215,33 +211,29 @@ class _HighlightCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(note.mood.emoji,
-                    style: const TextStyle(fontSize: 16)),
+                Text(note.mood.emoji, style: const TextStyle(fontSize: 16)),
                 const SizedBox(width: 6),
                 Text(note.mood.label,
-                    style: const TextStyle(
-                        color: AppColors.textSecondary, fontSize: 12)),
+                    style: TextStyle(color: cs.textSecondary, fontSize: 12)),
                 const Spacer(),
                 Text(
                   DateFormat('MMM d').format(note.createdAt),
-                  style: const TextStyle(
-                      color: AppColors.textHint, fontSize: 11),
+                  style: TextStyle(color: cs.textHint, fontSize: 11),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            _buildHighlight(note.content, query),
+            _buildHighlight(note.content, query, cs),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHighlight(String text, String query) {
+  Widget _buildHighlight(String text, String query, AppColorScheme cs) {
     if (query.isEmpty) {
       return Text(text,
-          style: const TextStyle(
-              color: AppColors.textPrimary, fontSize: 14, height: 1.5));
+          style: TextStyle(color: cs.textPrimary, fontSize: 14, height: 1.5));
     }
 
     final lower = text.toLowerCase();
@@ -254,21 +246,21 @@ class _HighlightCard extends StatelessWidget {
       if (idx == -1) {
         spans.add(TextSpan(
           text: text.substring(start),
-          style: const TextStyle(color: AppColors.textPrimary),
+          style: TextStyle(color: cs.textPrimary),
         ));
         break;
       }
       if (idx > start) {
         spans.add(TextSpan(
           text: text.substring(start, idx),
-          style: const TextStyle(color: AppColors.textPrimary),
+          style: TextStyle(color: cs.textPrimary),
         ));
       }
       spans.add(TextSpan(
         text: text.substring(idx, idx + query.length),
-        style: const TextStyle(
-          color: AppColors.bgDark,
-          backgroundColor: AppColors.accent,
+        style: TextStyle(
+          color: cs.bgCard,
+          backgroundColor: cs.accent,
           fontWeight: FontWeight.w700,
         ),
       ));

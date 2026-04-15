@@ -98,6 +98,7 @@ class _LockScreenState extends State<LockScreen>
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final title = widget.isSetup
         ? (_confirming ? 'Confirm PIN' : 'Set PIN')
         : 'Enter PIN';
@@ -108,24 +109,22 @@ class _LockScreenState extends State<LockScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.lock_outline, size: 48, color: AppColors.accent)
+              Icon(Icons.lock_outline, size: 48, color: cs.accent)
                   .animate()
                   .scale(duration: 500.ms, curve: Curves.elasticOut),
               const SizedBox(height: 16),
               Text(
                 AppStrings.appName,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: cs.textPrimary,
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
                 ),
               ),
               const SizedBox(height: 8),
               Text(title,
-                  style: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 14)),
+                  style: TextStyle(color: cs.textSecondary, fontSize: 14)),
               const SizedBox(height: 40),
-              // PIN dots
               AnimatedBuilder(
                 animation: _shakeCtrl,
                 builder: (_, child) {
@@ -150,14 +149,14 @@ class _LockScreenState extends State<LockScreen>
                         color: _error
                             ? AppColors.error
                             : filled
-                            ? AppColors.accent
-                            : AppColors.divider,
+                                ? cs.accent
+                                : cs.divider,
                         boxShadow: filled && !_error
                             ? [
-                          BoxShadow(
-                              color: AppColors.accent.withOpacity(0.5),
-                              blurRadius: 8)
-                        ]
+                                BoxShadow(
+                                    color: cs.accent.withOpacity(0.5),
+                                    blurRadius: 8)
+                              ]
                             : [],
                       ),
                     );
@@ -167,20 +166,19 @@ class _LockScreenState extends State<LockScreen>
               if (_error)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
-                  child: Text('Incorrect PIN',
-                      style: const TextStyle(
-                          color: AppColors.error, fontSize: 13))
+                  child: const Text('Incorrect PIN',
+                          style: TextStyle(color: AppColors.error, fontSize: 13))
                       .animate()
                       .fadeIn(),
                 ),
               const SizedBox(height: 48),
-              _buildKeypad(),
+              _buildKeypad(cs),
               const SizedBox(height: 8),
               if (!widget.isSetup)
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel',
-                      style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text('Cancel',
+                      style: TextStyle(color: cs.textSecondary)),
                 ),
             ],
           ),
@@ -189,7 +187,7 @@ class _LockScreenState extends State<LockScreen>
     );
   }
 
-  Widget _buildKeypad() {
+  Widget _buildKeypad(AppColorScheme cs) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -202,7 +200,7 @@ class _LockScreenState extends State<LockScreen>
           ])
             Row(
               children: row
-                  .map((k) => Expanded(child: _buildKey(k)))
+                  .map((k) => Expanded(child: _buildKey(k, cs)))
                   .toList(),
             ),
         ],
@@ -210,7 +208,7 @@ class _LockScreenState extends State<LockScreen>
     );
   }
 
-  Widget _buildKey(String key) {
+  Widget _buildKey(String key, AppColorScheme cs) {
     return GestureDetector(
       onTap: () {
         if (key == '⌫') {
@@ -225,17 +223,17 @@ class _LockScreenState extends State<LockScreen>
           aspectRatio: 1,
           child: Container(
             decoration: BoxDecoration(
-              color: key.isEmpty ? Colors.transparent : AppColors.bgCardLight,
+              color: key.isEmpty ? Colors.transparent : cs.bgCardLight,
               shape: BoxShape.circle,
               border: key.isEmpty
                   ? null
-                  : Border.all(color: AppColors.divider, width: 1),
+                  : Border.all(color: cs.divider, width: 1),
             ),
             child: Center(
               child: Text(
                 key,
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: cs.textPrimary,
                   fontSize: key == '⌫' ? 20 : 22,
                   fontWeight: FontWeight.w600,
                 ),

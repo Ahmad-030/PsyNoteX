@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:lottie/lottie.dart' show Lottie;
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../utils/app_theme.dart';
@@ -93,6 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _fabMini(IconData icon, String label, VoidCallback onTap) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return GestureDetector(
       onTap: onTap,
       child: Row(
@@ -101,13 +103,12 @@ class _HomeScreenState extends State<HomeScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.bgCard,
+              color: cs.bgCard,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.divider),
+              border: Border.all(color: cs.divider),
             ),
             child: Text(label,
-                style: const TextStyle(
-                    color: AppColors.textPrimary, fontSize: 13)),
+                style: TextStyle(color: cs.textPrimary, fontSize: 13)),
           ),
           const SizedBox(width: 8),
           CircleAvatar(
@@ -121,13 +122,14 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildNav() {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.divider, width: 1)),
+        color: cs.bgCard,
+        border: Border(top: BorderSide(color: cs.divider, width: 1)),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withOpacity(0.15),
               blurRadius: 20,
               offset: const Offset(0, -5)),
         ],
@@ -150,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _navItem(int idx, IconData icon, String label, {VoidCallback? onTap}) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final selected = _navIndex == idx;
     return Expanded(
       child: GestureDetector(
@@ -171,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 child: Icon(
                   icon,
-                  color: selected ? AppColors.accent : AppColors.textHint,
+                  color: selected ? cs.accent : cs.textHint,
                   size: 22,
                 ),
               ),
@@ -179,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen>
               Text(
                 label,
                 style: TextStyle(
-                  color: selected ? AppColors.accent : AppColors.textHint,
+                  color: selected ? cs.accent : cs.textHint,
                   fontSize: 10,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
                 ),
@@ -207,7 +210,7 @@ class _TimelineTab extends StatelessWidget {
         slivers: [
           SliverToBoxAdapter(child: _buildHeader(context, prov)),
           if (notes.isEmpty)
-            SliverFillRemaining(child: _buildEmpty())
+            SliverFillRemaining(child: _buildEmpty(context))
           else
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -261,6 +264,7 @@ class _TimelineTab extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context, AppProvider prov) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final streak = prov.getStreak();
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
@@ -272,15 +276,14 @@ class _TimelineTab extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('PsyNoteX',
+                  Text('PsyNoteX',
                       style: TextStyle(
-                          color: AppColors.textPrimary,
+                          color: cs.textPrimary,
                           fontSize: 26,
                           fontWeight: FontWeight.w800)),
                   Text(
                     '${prov.notes.length} thoughts captured',
-                    style: const TextStyle(
-                        color: AppColors.textSecondary, fontSize: 13),
+                    style: TextStyle(color: cs.textSecondary, fontSize: 13),
                   ),
                 ],
               ),
@@ -311,42 +314,46 @@ class _TimelineTab extends StatelessWidget {
     );
   }
 
-  Widget _buildEmpty() {
+  Widget _buildEmpty(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('🧠', style: TextStyle(fontSize: 64))
-              .animate()
-              .scale(duration: 500.ms, curve: Curves.elasticOut),
+        Lottie.asset(
+        'assets/lottie/menu.json',
+        width: 200,
+        height: 200,
+        fit: BoxFit.contain,),
           const SizedBox(height: 16),
-          const Text('No thoughts yet',
+          Text('No thoughts yet',
               style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: cs.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
-          const Text('Tap + to capture your first thought',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+          Text('Tap + to capture your first thought',
+              style: TextStyle(color: cs.textSecondary, fontSize: 14)),
         ],
       ),
     );
   }
 
   void _confirmDelete(BuildContext context, AppProvider prov, String id) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('Delete Note',
-            style: TextStyle(color: AppColors.textPrimary)),
-        content: const Text('This cannot be undone.',
-            style: TextStyle(color: AppColors.textSecondary)),
+        backgroundColor: cs.bgCard,
+        title: Text('Delete Note',
+            style: TextStyle(color: cs.textPrimary)),
+        content: Text('This cannot be undone.',
+            style: TextStyle(color: cs.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Cancel',
+                style: TextStyle(color: cs.textSecondary)),
           ),
           TextButton(
             onPressed: () {

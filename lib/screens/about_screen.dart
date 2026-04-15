@@ -11,6 +11,7 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final prov = context.watch<AppProvider>();
     return Scaffold(
       body: GradientBackground(
@@ -23,8 +24,8 @@ class AboutScreen extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: IconButton(
-                      icon: const Icon(Icons.arrow_back_ios,
-                          color: AppColors.textPrimary, size: 20),
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: cs.textPrimary, size: 20),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
@@ -32,39 +33,36 @@ class AboutScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 if (prov.lottieEnabled)
                   Lottie.asset(
-                    'assets/lottie/about.json',
+                    'assets/lottie/splash.json',
                     width: 180,
                     height: 180,
                     fit: BoxFit.contain,
-                    errorBuilder: (_, __, ___) => const Icon(
+                    errorBuilder: (_, __, ___) => Icon(
                       Icons.psychology_outlined,
                       size: 100,
-                      color: AppColors.accent,
+                      color: cs.accent,
                     ),
                   )
                 else
-                  const Icon(Icons.psychology_outlined,
-                      size: 100, color: AppColors.accent),
+                  Icon(Icons.psychology_outlined, size: 100, color: cs.accent),
                 const SizedBox(height: 16),
                 Text(
                   AppStrings.appName,
-                  style: const TextStyle(
-                    color: AppColors.textPrimary,
+                  style: TextStyle(
+                    color: cs.textPrimary,
                     fontSize: 32,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.5,
                   ),
                 ).animate().fadeIn(delay: 100.ms),
-                const SizedBox(height: 8),
-
                 const SizedBox(height: 32),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: GlassCard(
                     child: Text(
                       AppStrings.appDesc,
-                      style: const TextStyle(
-                        color: AppColors.textSecondary,
+                      style: TextStyle(
+                        color: cs.textSecondary,
                         fontSize: 15,
                         height: 1.7,
                       ),
@@ -83,7 +81,7 @@ class AboutScreen extends StatelessWidget {
                           label: 'Developer',
                           value: AppStrings.devName,
                         ),
-                        const Divider(color: AppColors.divider, height: 20),
+                        Divider(color: cs.divider, height: 20),
                         _InfoRow(
                           icon: Icons.email_outlined,
                           label: 'Contact',
@@ -96,10 +94,7 @@ class AboutScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 Text(
                   'Made with 💜 for mindful journalers',
-                  style: const TextStyle(
-                    color: AppColors.textHint,
-                    fontSize: 13,
-                  ),
+                  style: TextStyle(color: cs.textHint, fontSize: 13),
                 ).animate().fadeIn(delay: 400.ms),
                 const SizedBox(height: 40),
               ],
@@ -120,19 +115,18 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Row(
       children: [
-        Icon(icon, color: AppColors.accent, size: 20),
+        Icon(icon, color: cs.accent, size: 20),
         const SizedBox(width: 12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(label,
-                style: const TextStyle(
-                    color: AppColors.textHint, fontSize: 11)),
+            Text(label, style: TextStyle(color: cs.textHint, fontSize: 11)),
             Text(value,
-                style: const TextStyle(
-                    color: AppColors.textPrimary,
+                style: TextStyle(
+                    color: cs.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.w600)),
           ],

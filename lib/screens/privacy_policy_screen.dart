@@ -28,6 +28,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Scaffold(
       body: GradientBackground(
         child: SafeArea(
@@ -38,14 +39,14 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios,
-                          color: AppColors.textPrimary, size: 20),
+                      icon: Icon(Icons.arrow_back_ios,
+                          color: cs.textPrimary, size: 20),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Text(
+                    Text(
                       'Privacy Policy',
                       style: TextStyle(
-                        color: AppColors.textPrimary,
+                        color: cs.textPrimary,
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                       ),
@@ -61,9 +62,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                       child: WebViewWidget(controller: _controller),
                     ),
                     if (_loading)
-                      const Center(
+                      Center(
                         child: CircularProgressIndicator(
-                            color: AppColors.accent, strokeWidth: 2),
+                            color: cs.accent, strokeWidth: 2),
                       ),
                   ],
                 ),

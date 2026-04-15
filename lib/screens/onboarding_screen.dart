@@ -77,6 +77,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Scaffold(
       body: GradientBackground(
         child: SafeArea(
@@ -86,8 +87,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 alignment: Alignment.topRight,
                 child: TextButton(
                   onPressed: _finish,
-                  child: const Text('Skip',
-                      style: TextStyle(color: AppColors.textSecondary)),
+                  child: Text('Skip',
+                      style: TextStyle(color: cs.textSecondary)),
                 ),
               ),
               Expanded(
@@ -95,10 +96,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   controller: _controller,
                   onPageChanged: (i) => setState(() => _page = i),
                   itemCount: _pages.length,
-                  itemBuilder: (_, i) => _buildPage(_pages[i]),
+                  itemBuilder: (_, i) => _buildPage(_pages[i], cs),
                 ),
               ),
-              _buildDots(),
+              _buildDots(cs),
               const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -142,7 +143,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildPage(_OnboardPage page) {
+  Widget _buildPage(_OnboardPage page, AppColorScheme cs) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -155,8 +156,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 40),
           Text(
             page.title,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
+            style: TextStyle(
+              color: cs.textPrimary,
               fontSize: 28,
               fontWeight: FontWeight.w800,
             ),
@@ -165,8 +166,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           const SizedBox(height: 16),
           Text(
             page.subtitle,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: cs.textSecondary,
               fontSize: 15,
               height: 1.6,
             ),
@@ -177,7 +178,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  Widget _buildDots() {
+  Widget _buildDots(AppColorScheme cs) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(_pages.length, (i) {
@@ -187,7 +188,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           width: i == _page ? 24 : 8,
           height: 8,
           decoration: BoxDecoration(
-            color: i == _page ? AppColors.accent : AppColors.divider,
+            color: i == _page ? cs.accent : cs.divider,
             borderRadius: BorderRadius.circular(4),
           ),
         );

@@ -12,6 +12,7 @@ class TagsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final prov = context.watch<AppProvider>();
     final usage = prov.getTagUsage();
 
@@ -23,10 +24,10 @@ class TagsScreen extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
             child: Row(
               children: [
-                const Text(
+                Text(
                   'Tags',
                   style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: cs.textPrimary,
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
                   ),
@@ -34,14 +35,14 @@ class TagsScreen extends StatelessWidget {
                 const Spacer(),
                 IconButton(
                   onPressed: () => _showAddTag(context, prov),
-                  icon: const Icon(Icons.add, color: AppColors.accent),
+                  icon: Icon(Icons.add, color: cs.accent),
                 ),
               ],
             ),
           ),
           Expanded(
             child: prov.tags.isEmpty
-                ? _buildEmpty()
+                ? _buildEmpty(context)
                 : AnimationLimiter(
                     child: ListView.builder(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -60,7 +61,7 @@ class TagsScreen extends StatelessWidget {
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 10),
                                 decoration: BoxDecoration(
-                                  color: AppColors.bgCard,
+                                  color: cs.bgCard,
                                   borderRadius: BorderRadius.circular(14),
                                   border: Border.all(
                                       color: color.withOpacity(0.3)),
@@ -82,13 +83,13 @@ class TagsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   title: Text(tag.name,
-                                      style: const TextStyle(
-                                          color: AppColors.textPrimary,
+                                      style: TextStyle(
+                                          color: cs.textPrimary,
                                           fontWeight: FontWeight.w600)),
                                   subtitle: Text(
                                       '$count note${count != 1 ? 's' : ''}',
-                                      style: const TextStyle(
-                                          color: AppColors.textHint,
+                                      style: TextStyle(
+                                          color: cs.textHint,
                                           fontSize: 12)),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.delete_outline,
@@ -110,7 +111,8 @@ class TagsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmpty() {
+  Widget _buildEmpty(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,27 +121,28 @@ class TagsScreen extends StatelessWidget {
               .animate()
               .scale(duration: 500.ms, curve: Curves.elasticOut),
           const SizedBox(height: 16),
-          const Text('No tags yet',
+          Text('No tags yet',
               style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: cs.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
-          const Text('Tap + to create your first tag',
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+          Text('Tap + to create your first tag',
+              style: TextStyle(color: cs.textSecondary, fontSize: 14)),
         ],
       ),
     );
   }
 
   void _showAddTag(BuildContext context, AppProvider prov) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final ctrl = TextEditingController();
     int selectedColor = 0;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: cs.bgCard,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => StatefulBuilder(builder: (ctx, setS) {
@@ -154,27 +157,26 @@ class TagsScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('New Tag',
+              Text('New Tag',
                   style: TextStyle(
-                      color: AppColors.textPrimary,
+                      color: cs.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w700)),
               const SizedBox(height: 16),
               TextField(
                 controller: ctrl,
                 autofocus: true,
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: const InputDecoration(
+                style: TextStyle(color: cs.textPrimary),
+                decoration: InputDecoration(
                   hintText: 'Tag name...',
                   prefixText: '# ',
                   prefixStyle: TextStyle(
-                      color: AppColors.accent, fontWeight: FontWeight.w700),
+                      color: cs.accent, fontWeight: FontWeight.w700),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Color',
-                  style: TextStyle(
-                      color: AppColors.textSecondary, fontSize: 13)),
+              Text('Color',
+                  style: TextStyle(color: cs.textSecondary, fontSize: 13)),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 10,
@@ -197,8 +199,8 @@ class TagsScreen extends StatelessWidget {
                         boxShadow: selectedColor == i
                             ? [
                                 BoxShadow(
-                                    color:
-                                        AppColors.tagColors[i].withOpacity(0.5),
+                                    color: AppColors.tagColors[i]
+                                        .withOpacity(0.5),
                                     blurRadius: 8)
                               ]
                             : [],
@@ -235,19 +237,18 @@ class TagsScreen extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context, AppProvider prov, String name) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        title: const Text('Delete Tag',
-            style: TextStyle(color: AppColors.textPrimary)),
+        backgroundColor: cs.bgCard,
+        title: Text('Delete Tag', style: TextStyle(color: cs.textPrimary)),
         content: Text('Remove "#$name" from all notes?',
-            style: const TextStyle(color: AppColors.textSecondary)),
+            style: TextStyle(color: cs.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppColors.textSecondary)),
+            child: Text('Cancel', style: TextStyle(color: cs.textSecondary)),
           ),
           TextButton(
             onPressed: () {

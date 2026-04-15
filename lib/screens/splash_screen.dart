@@ -28,8 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     final prov = context.read<AppProvider>();
     if (!prov.onboarded) {
-      Navigator.pushReplacement(
-          context, _route(const OnboardingScreen()));
+      Navigator.pushReplacement(context, _route(const OnboardingScreen()));
     } else if (prov.isLocked) {
       Navigator.pushReplacement(context, _route(const LockScreen()));
     } else {
@@ -46,6 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final prov = context.watch<AppProvider>();
     return Scaffold(
       body: GradientBackground(
@@ -66,8 +66,8 @@ class _SplashScreenState extends State<SplashScreen> {
               const SizedBox(height: 24),
               Text(
                 AppStrings.appName,
-                style: const TextStyle(
-                  color: AppColors.textPrimary,
+                style: TextStyle(
+                  color: cs.textPrimary,
                   fontSize: 36,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 2,
@@ -76,15 +76,15 @@ class _SplashScreenState extends State<SplashScreen> {
               const SizedBox(height: 8),
               Text(
                 AppStrings.tagline,
-                style: const TextStyle(
-                  color: AppColors.accent,
+                style: TextStyle(
+                  color: cs.accent,
                   fontSize: 13,
                   letterSpacing: 1,
                 ),
               ).animate().fadeIn(delay: 700.ms),
               const SizedBox(height: 60),
-              const CircularProgressIndicator(
-                color: AppColors.accent,
+              CircularProgressIndicator(
+                color: cs.accent,
                 strokeWidth: 2,
               ).animate().fadeIn(delay: 1200.ms),
             ],
@@ -106,10 +106,14 @@ class _SplashScreenState extends State<SplashScreen> {
           end: Alignment.bottomRight,
         ),
         boxShadow: [
-          BoxShadow(color: AppColors.primary.withOpacity(0.5), blurRadius: 30, spreadRadius: 5),
+          BoxShadow(
+              color: AppColors.primary.withOpacity(0.5),
+              blurRadius: 30,
+              spreadRadius: 5),
         ],
       ),
-      child: const Icon(Icons.psychology_outlined, size: 60, color: Colors.white),
+      child: const Icon(Icons.psychology_outlined,
+          size: 60, color: Colors.white),
     ).animate().scale(duration: 600.ms, curve: Curves.elasticOut);
   }
 }

@@ -13,6 +13,7 @@ class AnalyticsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final prov = context.watch<AppProvider>();
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
 
     return SafeArea(
       child: CustomScrollView(
@@ -20,10 +21,10 @@ class AnalyticsScreen extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-              child: const Text(
+              child: Text(
                 'Insights',
                 style: TextStyle(
-                  color: AppColors.textPrimary,
+                  color: cs.textPrimary,
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
                 ),
@@ -80,6 +81,7 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Expanded(
       child: GlassCard(
         padding: const EdgeInsets.all(12),
@@ -88,14 +90,13 @@ class _StatCard extends StatelessWidget {
             Text(icon, style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 6),
             Text(value,
-                style: const TextStyle(
-                    color: AppColors.textPrimary,
+                style: TextStyle(
+                    color: cs.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w800)),
             const SizedBox(height: 2),
             Text(label,
-                style: const TextStyle(
-                    color: AppColors.textHint, fontSize: 10),
+                style: TextStyle(color: cs.textHint, fontSize: 10),
                 textAlign: TextAlign.center),
           ],
         ),
@@ -110,6 +111,7 @@ class _WeeklyChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final data = prov.getWeeklyMoodScores();
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -119,14 +121,14 @@ class _WeeklyChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Weekly Mood',
+            Text('Weekly Mood',
                 style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: cs.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w700)),
             const SizedBox(height: 4),
-            const Text('Mood score over past 7 days',
-                style: TextStyle(color: AppColors.textHint, fontSize: 12)),
+            Text('Mood score over past 7 days',
+                style: TextStyle(color: cs.textHint, fontSize: 12)),
             const SizedBox(height: 16),
             SizedBox(
               height: 140,
@@ -137,8 +139,8 @@ class _WeeklyChart extends StatelessWidget {
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
-                    getDrawingHorizontalLine: (_) => const FlLine(
-                      color: AppColors.divider,
+                    getDrawingHorizontalLine: (_) => FlLine(
+                      color: cs.divider,
                       strokeWidth: 0.5,
                     ),
                   ),
@@ -155,8 +157,7 @@ class _WeeklyChart extends StatelessWidget {
                         showTitles: true,
                         getTitlesWidget: (v, _) => Text(
                           days[v.toInt()],
-                          style: const TextStyle(
-                              color: AppColors.textHint, fontSize: 10),
+                          style: TextStyle(color: cs.textHint, fontSize: 10),
                         ),
                       ),
                     ),
@@ -175,7 +176,7 @@ class _WeeklyChart extends StatelessWidget {
                             end: Alignment.topCenter,
                             colors: [
                               AppColors.primary,
-                              AppColors.accent.withOpacity(0.8),
+                              cs.accent.withOpacity(0.8),
                             ],
                           ),
                         ),
@@ -205,6 +206,7 @@ class _MoodPieChartState extends State<_MoodPieChart> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final dist = widget.prov.getMoodDistribution();
     if (dist.isEmpty) return const SizedBox.shrink();
 
@@ -226,9 +228,9 @@ class _MoodPieChartState extends State<_MoodPieChart> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Mood Distribution',
+            Text('Mood Distribution',
                 style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: cs.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w700)),
             const SizedBox(height: 16),
@@ -249,8 +251,8 @@ class _MoodPieChartState extends State<_MoodPieChart> {
                                 resp.touchedSection == null) {
                               _touched = -1;
                             } else {
-                              _touched = resp
-                                  .touchedSection!.touchedSectionIndex;
+                              _touched =
+                                  resp.touchedSection!.touchedSectionIndex;
                             }
                           });
                         },
@@ -275,13 +277,12 @@ class _MoodPieChartState extends State<_MoodPieChart> {
                                 style: const TextStyle(fontSize: 14)),
                             const SizedBox(width: 4),
                             Text(e.key.label,
-                                style: const TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 12)),
+                                style: TextStyle(
+                                    color: cs.textSecondary, fontSize: 12)),
                             const Spacer(),
                             Text('${e.value}',
-                                style: const TextStyle(
-                                    color: AppColors.textPrimary,
+                                style: TextStyle(
+                                    color: cs.textPrimary,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700)),
                           ],
@@ -305,9 +306,10 @@ class _HeatmapSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final heatmap = prov.getHeatmapData();
     final now = DateTime.now();
-    final weeks = 10;
+    const weeks = 10;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -315,14 +317,14 @@ class _HeatmapSection extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Activity Heatmap',
+            Text('Activity Heatmap',
                 style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: cs.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w700)),
             const SizedBox(height: 4),
-            const Text('Past 10 weeks',
-                style: TextStyle(color: AppColors.textHint, fontSize: 12)),
+            Text('Past 10 weeks',
+                style: TextStyle(color: cs.textHint, fontSize: 12)),
             const SizedBox(height: 12),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -345,7 +347,7 @@ class _HeatmapSection extends StatelessWidget {
                           height: 12,
                           margin: const EdgeInsets.only(bottom: 3),
                           decoration: BoxDecoration(
-                            color: AppColors.accent.withOpacity(opacity),
+                            color: cs.accent.withOpacity(opacity),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         );
@@ -359,9 +361,8 @@ class _HeatmapSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text('Less',
-                    style: TextStyle(
-                        color: AppColors.textHint, fontSize: 10)),
+                Text('Less',
+                    style: TextStyle(color: cs.textHint, fontSize: 10)),
                 const SizedBox(width: 4),
                 ...List.generate(5, (i) {
                   return Container(
@@ -369,16 +370,14 @@ class _HeatmapSection extends StatelessWidget {
                     height: 10,
                     margin: const EdgeInsets.only(left: 2),
                     decoration: BoxDecoration(
-                      color: AppColors.accent
-                          .withOpacity(0.1 + i * 0.18),
+                      color: cs.accent.withOpacity(0.1 + i * 0.18),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   );
                 }),
                 const SizedBox(width: 4),
-                const Text('More',
-                    style: TextStyle(
-                        color: AppColors.textHint, fontSize: 10)),
+                Text('More',
+                    style: TextStyle(color: cs.textHint, fontSize: 10)),
               ],
             ),
           ],
@@ -394,52 +393,53 @@ class _InsightsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final insights = prov.getInsights();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
             child: Text('Smart Insights',
                 style: TextStyle(
-                    color: AppColors.textPrimary,
+                    color: cs.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w700)),
           ),
           ...insights.asMap().entries.map((e) {
             return Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: GlassCard(
-                  padding: const EdgeInsets.all(14),
-                  borderRadius: 12,
-                  child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(10),
+              padding: const EdgeInsets.only(bottom: 10),
+              child: GlassCard(
+                padding: const EdgeInsets.all(14),
+                borderRadius: 12,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(Icons.lightbulb_outline,
+                          color: cs.accent, size: 18),
                     ),
-                    child: const Icon(Icons.lightbulb_outline,
-                        color: AppColors.accent, size: 18),
-                  ),
-                  const SizedBox(width: 30),
-                  Expanded(
-                    child: Text(e.value,
-                        style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 13,
-                            height: 1.4)),
-                  ),
-                ],
-                  ),
-                )
-                    .animate()
-                    .fadeIn(delay: Duration(milliseconds: 100 * e.key))
-                    .slideX(begin: -0.2, end: 0),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(e.value,
+                          style: TextStyle(
+                              color: cs.textPrimary,
+                              fontSize: 13,
+                              height: 1.4)),
+                    ),
+                  ],
+                ),
+              )
+                  .animate()
+                  .fadeIn(delay: Duration(milliseconds: 100 * e.key))
+                  .slideX(begin: -0.2, end: 0),
             );
           }),
         ],

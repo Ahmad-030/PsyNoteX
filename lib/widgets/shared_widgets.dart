@@ -24,6 +24,7 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
@@ -33,10 +34,10 @@ class GlassCard extends StatelessWidget {
           child: Container(
             padding: padding ?? const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(opacity),
+              color: cs.bgCard.withOpacity(0.85),
               borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
-                color: borderColor ?? AppColors.accent.withOpacity(0.15),
+                color: borderColor ?? cs.accent.withOpacity(0.15),
                 width: 1,
               ),
             ),
@@ -54,17 +55,16 @@ class GradientBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF0A0A1A),
-            Color(0xFF0F0A2A),
-            Color(0xFF0A0A1A),
-          ],
-          stops: [0.0, 0.5, 1.0],
+          colors: isDark
+              ? const [Color(0xFF0A0A1A), Color(0xFF0F0A2A), Color(0xFF0A0A1A)]
+              : const [Color(0xFFF2F0FF), Color(0xFFEAE4FF), Color(0xFFF2F0FF)],
+          stops: const [0.0, 0.5, 1.0],
         ),
       ),
       child: child,
@@ -98,14 +98,15 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Row(
         children: [
           Text(
             title,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: cs.textSecondary,
               fontSize: 13,
               fontWeight: FontWeight.w600,
               letterSpacing: 1.5,
@@ -135,22 +136,21 @@ class MoodChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primary.withOpacity(0.4)
-              : AppColors.bgCardLight,
+          color: selected ? AppColors.primary.withOpacity(0.4) : cs.bgCardLight,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: selected ? AppColors.accent : Colors.transparent,
+            color: selected ? cs.accent : Colors.transparent,
             width: 1.5,
           ),
           boxShadow: selected
-              ? [BoxShadow(color: AppColors.accent.withOpacity(0.2), blurRadius: 8)]
+              ? [BoxShadow(color: cs.accent.withOpacity(0.2), blurRadius: 8)]
               : [],
         ),
         child: Column(
@@ -165,7 +165,7 @@ class MoodChip extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: selected ? AppColors.accent : AppColors.textSecondary,
+                color: selected ? cs.accent : cs.textSecondary,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
               ),

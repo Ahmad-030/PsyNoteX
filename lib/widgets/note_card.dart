@@ -22,13 +22,14 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final tagColor = AppColors.tagColors[note.mood.index % AppColors.tagColors.length];
     return GestureDetector(
       onLongPress: onEdit,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: cs.bgCard,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: tagColor.withOpacity(0.2), width: 1),
           boxShadow: [
@@ -78,24 +79,20 @@ class NoteCard extends StatelessWidget {
                         const Spacer(),
                         Text(
                           DateFormat('MMM d, h:mm a').format(note.createdAt),
-                          style: const TextStyle(
-                            color: AppColors.textHint,
-                            fontSize: 11,
-                          ),
+                          style: TextStyle(color: cs.textHint, fontSize: 11),
                         ),
                         const SizedBox(width: 8),
                         GestureDetector(
                           onTap: onDelete,
-                          child: const Icon(Icons.close,
-                              size: 16, color: AppColors.textHint),
+                          child: Icon(Icons.close, size: 16, color: cs.textHint),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
                       note.content,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
+                      style: TextStyle(
+                        color: cs.textPrimary,
                         fontSize: 15,
                         height: 1.5,
                       ),
@@ -113,8 +110,7 @@ class NoteCard extends StatelessWidget {
                           );
                           final c = AppColors.tagColors[tag.colorIndex % AppColors.tagColors.length];
                           return Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
                               color: c.withOpacity(0.15),
                               borderRadius: BorderRadius.circular(10),
@@ -195,6 +191,7 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).extension<AppColorScheme>()!;
     final prov = context.watch<AppProvider>();
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
@@ -204,11 +201,11 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
         duration: 300.ms,
         padding: EdgeInsets.only(bottom: bottom),
         child: Container(
-          decoration: const BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          decoration: BoxDecoration(
+            color: cs.bgCard,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             border: Border(
-              top: BorderSide(color: AppColors.divider, width: 1),
+              top: BorderSide(color: cs.divider, width: 1),
             ),
           ),
           child: SingleChildScrollView(
@@ -222,7 +219,7 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.divider,
+                      color: cs.divider,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -232,8 +229,8 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                   children: [
                     Text(
                       widget.existing == null ? 'New Thought' : 'Edit Note',
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
+                      style: TextStyle(
+                        color: cs.textPrimary,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
@@ -246,7 +243,7 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                         style: TextStyle(
                           color: val.text.length > 90
                               ? AppColors.error
-                              : AppColors.textHint,
+                              : cs.textHint,
                           fontSize: 12,
                         ),
                       ),
@@ -259,17 +256,16 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                   maxLength: 100,
                   maxLines: 4,
                   autofocus: true,
-                  style: const TextStyle(
-                      color: AppColors.textPrimary, fontSize: 15, height: 1.5),
+                  style: TextStyle(color: cs.textPrimary, fontSize: 15, height: 1.5),
                   decoration: const InputDecoration(
                     hintText: 'What\'s on your mind?',
                     counterText: '',
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text('How are you feeling?',
+                Text('How are you feeling?',
                     style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: cs.textSecondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w600)),
                 const SizedBox(height: 10),
@@ -292,9 +288,9 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                 ),
                 if (prov.tags.isNotEmpty) ...[
                   const SizedBox(height: 16),
-                  const Text('Tags',
+                  Text('Tags',
                       style: TextStyle(
-                          color: AppColors.textSecondary,
+                          color: cs.textSecondary,
                           fontSize: 13,
                           fontWeight: FontWeight.w600)),
                   const SizedBox(height: 8),
@@ -318,7 +314,7 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
-                            color: sel ? c.withOpacity(0.2) : AppColors.bgCardLight,
+                            color: sel ? c.withOpacity(0.2) : cs.bgCardLight,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
                               color: sel ? c : Colors.transparent,
@@ -327,7 +323,7 @@ class _NoteBottomSheetState extends State<NoteBottomSheet> {
                           child: Text(
                             '#${tag.name}',
                             style: TextStyle(
-                              color: sel ? c : AppColors.textSecondary,
+                              color: sel ? c : cs.textSecondary,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                             ),
